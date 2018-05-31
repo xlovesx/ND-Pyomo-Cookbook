@@ -24,7 +24,7 @@ ssh crcfe02.crc.nd.edu
 Next, load your preferred version of Python. Pyomo supports both 2.7 and 3.x:
 
 ```bash
-module load python/3.6.4
+module load python/3.6.4 #Just use module load python, otherwise pip(or pip3) cannot work.
 ```
 
 Then, install Pyomo using `pip`, a popular package manager for Python:
