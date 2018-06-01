@@ -59,7 +59,7 @@ m.c2 = Constraint(expr = m.x[1] + 2*m.x[2] >= 0.3)
 m.OBJ = Objective(expr = m.x[3], sense=maximize) 
 
 # Specify solver
-solver=SolverFactory('ipopt')
+solver=SolverFactory('ipopt', executable="/afs/crc.nd.edu/x86_64_linux/i/ipopt/3.12.8/bin/")
 
 # Solve model
 solver.solve(m, tee=True)
@@ -101,7 +101,8 @@ This program contains Ipopt, a library for large-scale nonlinear optimization.
          For more information visit http://projects.coin-or.org/Ipopt
 ******************************************************************************
 
-This is Ipopt version 3.12.8, running with linear solver ma27.
+This is Ipopt version 3.12.8, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
 
 Number of nonzeros in equality constraint Jacobian...:        0
 Number of nonzeros in inequality constraint Jacobian.:        5
@@ -145,7 +146,7 @@ Number of inequality constraint evaluations          = 9
 Number of equality constraint Jacobian evaluations   = 0
 Number of inequality constraint Jacobian evaluations = 9
 Number of Lagrangian Hessian evaluations             = 8
-Total CPU secs in IPOPT (w/o function evaluations)   =      0.004
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.002
 Total CPU secs in NLP function evaluations           =      0.000
 
 EXIT: Optimal Solution Found.
@@ -167,17 +168,17 @@ The way you submit a Pyomo job to CRC is simply to submit a Python job. First wr
 #$ -N lmp
 
 module purge
-module load solver_name
+module load ipopt
 module load python/3.6.4
-python3 Python_script.py
+python3 pyomo_test.py
 ```
+
+and save the file as `pyomo_test_script`.
+
 Then you just submit the job:
 ```bash
-qsub -N job_name job_script_name
+qsub -N MyPyomoTest pyomo_test_script
 ```
-
-
-** Jacob and Xian - please fill this in **
 
 ## Available Solvers
 
@@ -280,6 +281,8 @@ Freed default Gurobi environment
 
 Two versions (modules) of Ipopt are available to CRC users: `ipopt/3.12.8` and `ipopt/hsl/3.12.8`. The latter supports HSL linear algebra routines whereas the former does not (and relies on the open-source library MUMPS). In general, the HSL linear algebra routines are more stable and are significantly faster for large-scale problems. All IPOPT users are strongly encouraged to use the HSL libraries. To obtain access to `ipopt/hsl/3.12.8`, ND users must apply for a [free academic license](http://www.hsl.rl.ac.uk/download/coinhsl/2015.06.23/) and then forward the approval email to CRCSupport@nd.edu. 
 
+#### With HSL Linear Algebra Library
+
 To use either version of Ipopt, first load the module. For example,
 
 ```module load ipopt/hsl/3.12.8```
@@ -363,6 +366,10 @@ Total CPU secs in NLP function evaluations           =      0.000
 
 EXIT: Optimal Solution Found.
 ```
+
+#### Without HSL Linear Algebra Library
+
+If you do not have access to the HSL linear algebra libraries, you may need to explicity specify the path to the ipopt executable. See **Test Problem** section above for an example.
 
 ### Coming Soon
 
