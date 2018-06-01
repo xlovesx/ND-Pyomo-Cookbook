@@ -155,6 +155,28 @@ EXIT: Optimal Solution Found.
 
 Per CRC policies, the interative nodes should only be used for testing short computational jobs. All other jobs should be submitted to a queue.
 
+The way you submit a Pyomo job to CRC is simply to submit a Python job. First write a job script:
+
+```
+#!/bin/csh
+#$ -pe smp 4
+#$ -m ae
+#$ -r n
+#$ -M NetID@nd.edu
+#$ -q long
+#$ -N lmp
+
+module purge
+module load solver_name
+module load python/3.6.4
+python3 Python_script.py
+```
+Then you just submit the job:
+```bash
+qsub -N job_name job_script_name
+```
+
+
 ** Jacob and Xian - please fill this in **
 
 ## Available Solvers
